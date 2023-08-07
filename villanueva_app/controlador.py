@@ -13,6 +13,7 @@ class Controlador:
         personas_agregadas = self.obtener_personas()
         context = {}
         context.update({'personas': personas_agregadas})
+        print('Hola Adri <3')
         return render(request, 'home.html', context)
 
     def guardar_persona(self, request):
