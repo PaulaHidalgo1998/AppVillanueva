@@ -1,0 +1,194 @@
+{% load static %}
+
+<input hidden value="{% url 'crearPersona' %}" id="url_crearPersona">
+<input hidden value="{% url 'borrarPersona' %}" id="url_borrarPersona">
+<input hidden value="{% url 'borrarTodo' %}" id="url_borrarTodo">
+<input hidden value="{% url 'crearPDF' %}" id="url_crearPDF">
+
+<div class="app">
+    <form class="formulario-usuario" id="form_persona_nueva">
+        {% csrf_token %}
+        <div class="d-flex flex-column">
+            <label>Apellidos</label>
+            <input id="apellidos" type="text">
+        </div>
+        <div class="d-flex flex-column">
+            <label>Nombre</label>
+            <input id="nombre" type="text">
+        </div>
+        <div class="d-flex flex-column">
+            <label>Dineros</label>
+            <input id="dineros" type="number">
+        </div>
+    </form>
+    <div >
+        <button onclick="submit_form()">Añadir persona</button>
+    </div>
+
+    <div class="tabla-usuarios">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nº</th>
+                    <th>Apellidos</th>
+                    <th>Nombre</th>
+                    <th>Dineros</th>
+                    <th>Tipo Aportación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for persona in personas %}
+                    <tr>
+                        <td>{{persona.numero_socio}}</td>
+                        <td>{{persona.apellidos}}</td>
+                        <td>{{persona.nombre}}</td>
+                        <td>{{persona.dinero}}</td>
+                        <td>{{persona.tipo_aportacion}}</td>
+                        <td><i class="ph ph-trash" onclick="borrarPersona('{{persona.id}}')"></i></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="botones">
+        <div >
+            <button onclick="borrarTodo()">Borrar todas las personas</button>
+        </div>
+        <div >
+            <button onclick="crearPDF()">Descargar PDF</button>
+        </div>
+    </div>
+    
+</div>
+
+<link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+<script>
+    function submit_form(){
+        const apellidos = document.querySelector('#apellidos').value
+        const nombre = document.querySelector('#nombre').value
+        const dineros = document.querySelector('#dineros').value
+        const csrftoken = $('[name="csrfmiddlewaretoken"]').val();
+        if(apellidos === ''){
+            alert('Faltan los apellidos bobo')
+            return
+        }
+        if(nombre === ''){
+            alert('Faltan el nombre bobo')
+            return
+        }
+        if(dineros === ''){
+            alert('Faltan los dineros moroso')
+            return
+        }
+        $.ajax({
+
+            url : $('#url_crearPersona').val(),
+            type : 'POST',
+            data : {
+                'apellidos' : apellidos,
+                'nombre' : nombre,
+                'dineros' : dineros,
+            },
+            dataType:'json',
+            beforeSend: function(xhr, settings) {
+                // Add the CSRF token to the request header
+                xhr.setRequestHeader('X-CSRFToken', csrftoken);
+            },
+            success : function(data) {              
+                location.reload()
+            },
+            error : function(request,error)
+            {
+                if (request.status === 200){
+                    location.reload()
+                }else{
+                    alert("Request: "+JSON.stringify(request));
+                }
+            }
+        });
+    }
+
+    function borrarPersona(idPersona){
+        const csrftoken = $('[name="csrfmiddlewaretoken"]').val();
+        $.ajax({
+            url : $('#url_borrarPersona').val(),
+            type : 'POST',
+            data : {
+                'idPersona' : idPersona,
+            },
+            dataType:'json',
+            beforeSend: function(xhr, settings) {
+                // Add the CSRF token to the request header
+                xhr.setRequestHeader('X-CSRFToken', csrftoken);
+            },
+            success : function(data) {              
+                location.reload()
+            },
+            error : function(request,error)
+            {
+                if (request.status === 200){
+                    location.reload()
+                }else{
+                    alert("Request: "+JSON.stringify(request));
+                }
+            }
+        });
+    }
+
+    function borrarTodo(){
+        const csrftoken = $('[name="csrfmiddlewaretoken"]').val();
+        $.ajax({
+            url : $('#url_borrarTodo').val(),
+            type : 'POST',
+            data : {
+            },
+            dataType:'json',
+            beforeSend: function(xhr, settings) {
+                // Add the CSRF token to the request header
+                xhr.setRequestHeader('X-CSRFToken', csrftoken);
+            },
+            success : function(data) {              
+                location.reload()
+            },
+            error : function(request,error)
+            {
+                if (request.status === 200){
+                    location.reload()
+                }else{
+                    alert("Request: "+JSON.stringify(request));
+                }
+            }
+        });
+    }
+
+    function crearPDF(){
+        const csrftoken = $('[name="csrfmiddlewaretoken"]').val();
+        $.ajax({
+            url : $('#url_crearPDF').val(),
+            type : 'POST',
+            data : {
+            },
+            dataType:'json',
+            beforeSend: function(xhr, settings) {
+                // Add the CSRF token to the request header
+                xhr.setRequestHeader('X-CSRFToken', csrftoken);
+            },
+            success : function(data) {              
+                location.reload()
+            },
+            error : function(request,error)
+            {
+                if (request.status === 200){
+                    location.reload()
+                }else{
+                    alert("Request: "+JSON.stringify(request));
+                }
+            }
+        });
+    }
+</script>
