@@ -78,9 +78,11 @@ class Controlador:
         personas = self.obtener_personas()
 
         # Llenar la tabla con los datos de las personas
+        i = 0
         for persona in personas:
+            i += 1
             data.append([
-                str(persona.numero_socio),
+                str(i),
                 persona.apellidos,
                 persona.nombre,
                 persona.tipo_aportacion,
@@ -94,7 +96,6 @@ class Controlador:
             ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
             ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
             ('GRID', (0, 0), (-1, -1), 1, colors.black),
         ])
 
