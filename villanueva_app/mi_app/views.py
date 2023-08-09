@@ -26,5 +26,6 @@ def borrarTodo(request):
 
 def crearPDF(request):
     controlador = Controlador()
-    response = controlador.generar_pdf_personas_tabla(request)
+    # response = controlador.generar_pdf_personas_tabla(request)
+    response = controlador.generar_pdf_personas_listado(request)
     return HttpResponse(response, content_type='application/json')

@@ -65,9 +65,6 @@ class Controlador:
     def obtener_personas(self):
         return Persona.objects.filter().order_by('apellidos', 'tipo_aportacion')
 
-    # def exportar_pdf(self):
-    #     return ''
-
     def generar_pdf_personas_tabla(self, request):
         doc = SimpleDocTemplate("personas_cuotas_2023.pdf", pagesize=letter)
         elements = []
@@ -110,8 +107,8 @@ class Controlador:
         doc.build(elements)
         print('PDF CREADO')
 
-    def generar_pdf_personas_listado(self):
-        doc = SimpleDocTemplate("personas_cuotas_2023.pdf", pagesize=letter)
+    def generar_pdf_personas_listado(self, request):
+        doc = SimpleDocTemplate("personas.pdf", pagesize=letter)
         elements = []
 
         # Estilo de los párrafos
@@ -126,21 +123,22 @@ class Controlador:
         # Agregar un salto de línea
         elements.append(Spacer(1, 12))
 
+        personas = self.obtener_personas()
         # Listado de personas
-        # for persona in personas:
-        #     # Formatear los datos de la persona en un párrafo
-        #     datos_persona = "Número de Socio: {}<br/>Apellidos: {}<br/>Nombre: {}<br/>Tipo de Aportación: {}<br/>Dinero Aportado: {}".format(
-        #         persona.numero_socio,
-        #         persona.apellidos,
-        #         persona.nombre,
-        #         persona.tipo_aportacion,
-        #         persona.dinero_aportado
-        #     )
-        #     paragraph = Paragraph(datos_persona, style_normal)
-        #     elements.append(paragraph)
+        for persona in personas:
+            # Formatear los datos de la persona en un párrafo
+            datos_persona = "Número de Socio: {}<pre/>Apellidos: {}<pre/>Nombre: {}<pre/>Tipo de Aportación: {}<pre/>Dinero Aportado: {}".format(
+                persona.numero_socio,
+                persona.apellidos,
+                persona.nombre,
+                persona.tipo_aportacion,
+                persona.dinero
+            )
+            paragraph = Paragraph(datos_persona, style_normal)
+            elements.append(paragraph)
 
-        #     # Agregar un espacio entre cada persona
-        #     elements.append(Spacer(1, 12))
+            # Agregar un espacio entre cada persona
+            elements.append(Spacer(1, 12))
 
         datos = [
             [1, "Hidalgo", "Paula", "Joven", 40],

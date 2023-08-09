@@ -1,8 +1,19 @@
 .formulario-usuario {
     display: flex;
     flex-direction: column;
+    flex: 1;
     gap: 8px;
-    
+}
+
+.imagen-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.imagen {
+    max-width: 50%;
+    max-height: 125px; /* Ajusta el tamaño de la imagen según tu necesidad */
 }
 
 .app {

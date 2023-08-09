@@ -1,74 +1,90 @@
 {% load static %}
 
-<input hidden value="{% url 'crearPersona' %}" id="url_crearPersona">
-<input hidden value="{% url 'borrarPersona' %}" id="url_borrarPersona">
-<input hidden value="{% url 'borrarTodo' %}" id="url_borrarTodo">
-<input hidden value="{% url 'crearPDF' %}" id="url_crearPDF">
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Cuotas 2023 VDC</title>
+        <!-- Referencia al ícono -->
+        <link rel="icon" href="static/address-book.png" type="image/png">
+    </head>
+    <body>
+        <input hidden value="{% url 'crearPersona' %}" id="url_crearPersona">
+        <input hidden value="{% url 'borrarPersona' %}" id="url_borrarPersona">
+        <input hidden value="{% url 'borrarTodo' %}" id="url_borrarTodo">
+        <input hidden value="{% url 'crearPDF' %}" id="url_crearPDF">
 
-<div class="app">
-    <form class="formulario-usuario" id="form_persona_nueva">
-        {% csrf_token %}
-        <div class="d-flex flex-column">
-            <label>Apellidos</label>
-            <input id="apellidos" type="text">
-        </div>
-        <div class="d-flex flex-column">
-            <label>Nombre</label>
-            <input id="nombre" type="text">
-        </div>
-        <div class="d-flex flex-column">
-            <label>Dineros</label>
-            <input id="dineros" type="number">
-        </div>
-    </form>
-    <div >
-        <button onclick="submit_form()">Añadir persona</button>
-    </div>
+        <div class="app">
+            <div class="d-flex">
+                <form class="formulario-usuario" id="form_persona_nueva">
+                    {% csrf_token %}
+                    <div class="d-flex flex-column">
+                        <label>Apellidos</label>
+                        <input id="apellidos" type="text">
+                    </div>
+                    <div class="d-flex flex-column">
+                        <label>Nombre</label>
+                        <input id="nombre" type="text">
+                    </div>
+                    <div class="d-flex flex-column">
+                        <label>Dineros</label>
+                        <input id="dineros" type="number">
+                    </div>
+                </form>
+                <div class="imagen-container">
+                    <img class="imagen" src="{% static 'logo_pena.jpeg' %}" alt="Imagen">
 
-    <div class="tabla-usuarios">
-        <table>
-            <thead>
-                <tr>
-                    <th>Nº</th>
-                    <th>Apellidos</th>
-                    <th>Nombre</th>
-                    <th>Dineros</th>
-                    <th>Tipo Aportación</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for persona in personas %}
-                    <tr>
-                        <td>{{persona.numero_socio}}</td>
-                        <td>{{persona.apellidos}}</td>
-                        <td>{{persona.nombre}}</td>
-                        <td>{{persona.dinero}}</td>
-                        <td>{{persona.tipo_aportacion}}</td>
-                        <td><i class="ph ph-trash" onclick="borrarPersona('{{persona.id}}')"></i></td>
-                    </tr>
-                {% endfor %}
-                <tr>
-                    <td>Total Personas</td>
-                    <td>{{personas.count}}</td>
-                    <td>-</td>
-                    <td>Total Dinero</td>
-                    <td>{{total_dinero}}</td>
-                    <td>-</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="botones">
-        <div >
-            <button onclick="borrarTodo()">Borrar todas las personas</button>
+                </div>
+            </div>
+            <div >
+                <button onclick="submit_form()">Añadir persona</button>
+            </div>
+
+            <div class="tabla-usuarios">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nº</th>
+                            <th>Apellidos</th>
+                            <th>Nombre</th>
+                            <th>Dineros</th>
+                            <th>Tipo Aportación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for persona in personas %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{persona.apellidos}}</td>
+                                <td>{{persona.nombre}}</td>
+                                <td>{{persona.dinero}}</td>
+                                <td>{{persona.tipo_aportacion}}</td>
+                                <td><i class="ph ph-trash" onclick="borrarPersona('{{persona.id}}')"></i></td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td>Total Personas</td>
+                            <td>{{personas.count}}</td>
+                            <td>-</td>
+                            <td>Total Dinero</td>
+                            <td>{{total_dinero}}</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="botones">
+                <div >
+                    <button onclick="borrarTodo()">Borrar todas las personas</button>
+                </div>
+                <div >
+                    <button onclick="crearPDF()">Descargar PDF</button>
+                </div>
+            </div>
+            
         </div>
-        <div >
-            <button onclick="crearPDF()">Descargar PDF</button>
-        </div>
-    </div>
-    
-</div>
+    </body>
+</html>
 
 <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
@@ -187,12 +203,12 @@
                 xhr.setRequestHeader('X-CSRFToken', csrftoken);
             },
             success : function(data) {              
-                location.reload()
+                alert("PDF Creado");
             },
             error : function(request,error)
             {
                 if (request.status === 200){
-                    location.reload()
+                    alert("PDF Creado");
                 }else{
                     alert("Request: "+JSON.stringify(request));
                 }
