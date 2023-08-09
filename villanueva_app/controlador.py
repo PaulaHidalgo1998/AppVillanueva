@@ -11,8 +11,10 @@ from mi_app.models import Persona
 class Controlador:
     def home(self, request):
         personas_agregadas = self.obtener_personas()
+        total_dinero = self.calcular_total_dinero()
         context = {}
         context.update({'personas': personas_agregadas})
+        context.update({'total_dinero': total_dinero})
         print('Hola Adri <3')
         return render(request, 'home.html', context)
 
@@ -51,15 +53,14 @@ class Controlador:
     def borrar_todo(self, request):
         Persona.objects.filter().delete()
 
-    # def calcular_totales(self):
-    #     personas = Persona.objects.filter()
-    #     total_personas = personas.count()
-    #     total_dinero = personas.filter(tipo_aportacion='joven') * 15 + personas.filter(tipo_aportacion='jubilado') * 25 + personas.filter(tipo_aportacion='adulto') * 40
-    #     otras_personas = personas.filter(tipo_aportacion='otro')
-    #     for otra in otras_personas:
-    #         total_dinero += otra.dinero
+    def calcular_total_dinero(self):
+        personas = Persona.objects.filter()
+        total_dinero = personas.filter(tipo_aportacion='joven').count() * 15 + personas.filter(tipo_aportacion='jubilado').count() * 25 + personas.filter(tipo_aportacion='adulto').count() * 40
+        otras_personas = personas.filter(tipo_aportacion='otro')
+        for otra in otras_personas:
+            total_dinero += otra.dinero
 
-    #     return total_personas, total_dinero
+        return total_dinero
 
     def obtener_personas(self):
         return Persona.objects.filter().order_by('apellidos', 'tipo_aportacion')
